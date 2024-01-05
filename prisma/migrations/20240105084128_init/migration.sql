@@ -49,6 +49,9 @@ CREATE TABLE "Rss" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Bot_name_instance_key" ON "Bot"("name", "instance");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "NotificationNote_rssUrl_key" ON "NotificationNote"("rssUrl");
 
 -- CreateIndex

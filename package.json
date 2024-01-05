@@ -9,7 +9,8 @@
     "lint": "next lint",
     "migrate": "prisma migrate deploy",
     "migrate-dev": "prisma migrate dev",
-    "up": "docker compose -f \"docker/compose.yml\" up -d",
+    "generate": "prisma generate",
+    "up": "docker compose -f \"docker/compose.yml\" up -d --build",
     "down": "docker compose -f \"docker/compose.yml\" down",
     "clean": "docker compose -f \"docker/compose.yml\" down --rmi all -v"
   },

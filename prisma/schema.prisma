@@ -16,6 +16,8 @@ model Bot {
   updatedAt        DateTime           @updatedAt
   notificationNote NotificationNote[]
   ScheduledNote    ScheduledNote[]
+
+  @@unique([name, instance])
 }
 
 model ScheduledNote {
