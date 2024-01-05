@@ -1,0 +1,9 @@
+docker
+.dockerignore
+
+.git
+.gitignore
+.vscode
+
+node_modules
+.next

@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Bot {
+  id               Int                @id @default(autoincrement())
+  name             String
+  instance         String
+  token            String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  notificationNote NotificationNote[]
+  ScheduledNote    ScheduledNote[]
+}
+
+model ScheduledNote {
+  id           Int      @id @default(autoincrement())
+  schedule     String
+  noteTemplate String
+  noteVisible  String
+  botId        Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sender       Bot      @relation(fields: [botId], references: [id])
+}
+
+model NotificationNote {
+  id           Int      @id @default(autoincrement())
+  rssUrl       String   @unique
+  schedule     String
+  noteTemplate String
+  noteVisible  String
+  botId        Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sender       Bot      @relation(fields: [botId], references: [id])
+  Rss          Rss?
+}
+
+model Rss {
+  id        Int              @id @default(autoincrement())
+  rssUrl    String           @unique
+  latestRss String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  target    NotificationNote @relation(fields: [rssUrl], references: [rssUrl])
+}
