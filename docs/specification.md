@@ -9,16 +9,16 @@ Misskey に定期投稿を行う Bot を管理、運用するツール
 
 ## Technology
 
-- Next.js
-    投稿API
+- Next.js\
+    投稿API\
     管理画面
-- postgreSQL
+- postgreSQL\
     データ管理
-- [Prisma](https://github.com/prisma/prisma)
+- [Prisma](https://github.com/prisma/prisma)\
     ORM
-- [PM2](https://github.com/Unitech/pm2)
+- [PM2](https://github.com/Unitech/pm2)\
     サービス常駐
-- docker container
+- docker container\
     環境管理
 
 ## DB Schema
@@ -73,44 +73,26 @@ Misskey に定期投稿を行う Bot を管理、運用するツール
 
 - /api
   - /bot
-    - GET
-        Bot情報を取得
-    - POST
-        Botを新規作成
-    - PUT
-        指定されたBotを更新
-    - DELETE
-        指定されたBotを削除
+    - GET : Bot情報を取得
+    - POST : Botを新規作成
+    - PUT : 指定されたBotを更新
+    - DELETE : 指定されたBotを削除
   - /cron
-    - PATCH
-        cronの更新
+    - PATCH : cronの更新
   - /note
-    - POST
-        ノートを投稿
+    - POST : ノートを投稿
   - /notification
-    - GET
-        通知情報を取得
-    - POST
-        通知を新規作成
-    - PUT
-        指定された通知を更新
-    - DELETE
-        指定された通知を削除
+    - GET : 通知情報を取得
+    - POST : 通知を新規作成
+    - PUT : 指定された通知を更新
+    - DELETE : 指定された通知を削除
   - /rss
-    - GET
-        RSS情報を取得
-    - POST
-        RSSを新規作成
-    - PUT
-        指定されたRSSを更新
-    - DELETE
-        指定されたRSSを削除
+    - GET : RSS情報を取得
+    - POST : RSSを新規作成
+    - PUT : 指定されたRSSを更新
+    - DELETE : 指定されたRSSを削除
   - /schedule
-    - GET
-        定期投稿情報を取得
-    - POST
-        定期投稿を新規作成
-    - PUT
-        指定された定期投稿を更新
-    - DELETE
-        指定された定期投稿を削除
+    - GET : 定期投稿情報を取得
+    - POST : 定期投稿を新規作成
+    - PUT : 指定された定期投稿を更新
+    - DELETE : 指定された定期投稿を削除

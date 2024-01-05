@@ -1,6 +1,6 @@
 # Growl
 
-Regular posting Bot for [Misskey](https://misskey-hub.net/):bell:
+Regular posting Bot for [Misskey](https://misskey-hub.net/):bell:\
 <small>― Snorlax is hungry and waiting for you!</small>
 
 ## Feature
