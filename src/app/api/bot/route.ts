@@ -46,7 +46,7 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-      console.log(error);
+      console.error(error);
       return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
@@ -83,7 +83,7 @@ export async function PUT(request: Request) {
           );
         }
       }
-      console.log(error);
+      console.error(error);
       return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
@@ -109,7 +109,7 @@ export async function DELETE(request: Request) {
           { status: 400 }
         );
       }
-      console.log(error);
+      console.error(error);
       return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
