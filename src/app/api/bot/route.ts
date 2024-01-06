@@ -30,12 +30,12 @@ export async function POST(request: Request) {
 
   if (name != null && instance != null && token != null) {
     try {
-      await BotRepository.insert({
+      const bot = await BotRepository.insert({
         name: name,
         instance: instance,
         token: token,
       });
-      return Response.json({ result: "Bot created" });
+      return Response.json({ result: "Bot created", data: bot });
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -45,13 +45,9 @@ export async function POST(request: Request) {
           { error: "Duplicate of name & instance" },
           { status: 400 }
         );
-      } else {
-        console.log(error);
-        return Response.json(
-          { error: "Internal Server Error" },
-          { status: 500 }
-        );
       }
+      console.log(error);
+      return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
     return Response.json({ error: "Query required" }, { status: 400 });
@@ -67,28 +63,28 @@ export async function PUT(request: Request) {
 
   if (id != 0 && name != null && instance != null && token != null) {
     try {
-      await BotRepository.update(id, {
+      const bot = await BotRepository.update(id, {
         name: name,
         instance: instance,
         token: token,
       });
-      return Response.json({ result: "Bot updated" });
+      return Response.json({ result: "Bot updated", data: bot });
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
-      ) {
-        return Response.json(
-          { error: "Duplicate of name & instance" },
-          { status: 400 }
-        );
-      } else {
-        console.log(error);
-        return Response.json(
-          { error: "Internal Server Error" },
-          { status: 500 }
-        );
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          return Response.json(
+            { error: "Duplicate of name & instance" },
+            { status: 400 }
+          );
+        } else if (error.code === "P2025") {
+          return Response.json(
+            { error: "Not found record with the specified ID" },
+            { status: 400 }
+          );
+        }
       }
+      console.log(error);
+      return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
     return Response.json({ error: "Query required" }, { status: 400 });
@@ -112,13 +108,9 @@ export async function DELETE(request: Request) {
           { error: "Not found record with the specified ID" },
           { status: 400 }
         );
-      } else {
-        console.log(error);
-        return Response.json(
-          { error: "Internal Server Error" },
-          { status: 500 }
-        );
       }
+      console.log(error);
+      return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
   } else {
     return Response.json({ error: "id required" }, { status: 400 });
