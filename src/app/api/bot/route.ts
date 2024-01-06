@@ -1,13 +1,5 @@
-import {
-  deleteById,
-  findAll,
-  findAllByIdAndInstance,
-  findAllByInstance,
-  findAllByName,
-  findOneById,
-  insert,
-  update,
-} from "./repository";
+import { Prisma } from "@prisma/client";
+import * as BotRepository from "./repository";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -17,20 +9,19 @@ export async function GET(request: Request) {
 
   let bots;
   if (id != 0) {
-    bots = await findOneById(id);
+    bots = await BotRepository.findOneById(id);
   } else if (name != null && instance != null) {
-    bots = await findAllByIdAndInstance(name, instance);
+    bots = await BotRepository.findAllByIdAndInstance(name, instance);
   } else if (name != null) {
-    bots = await findAllByName(name);
+    bots = await BotRepository.findAllByName(name);
   } else if (instance != null) {
-    bots = await findAllByInstance(instance);
+    bots = await BotRepository.findAllByInstance(instance);
   } else {
-    bots = await findAll();
+    bots = await BotRepository.findAll();
   }
   return Response.json(bots);
 }
 
-// TODO: avoid duplicate unique key
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name");
@@ -38,14 +29,35 @@ export async function POST(request: Request) {
   const token = searchParams.get("token");
 
   if (name != null && instance != null && token != null) {
-    await insert({ name: name, instance: instance, token: token });
-    return Response.json({ result: "Bot created" });
+    try {
+      await BotRepository.insert({
+        name: name,
+        instance: instance,
+        token: token,
+      });
+      return Response.json({ result: "Bot created" });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        return Response.json(
+          { error: "Duplicate of name & instance" },
+          { status: 400 }
+        );
+      } else {
+        console.log(error);
+        return Response.json(
+          { error: "Internal Server Error" },
+          { status: 500 }
+        );
+      }
+    }
   } else {
-    return Response.json({ message: "Query required" }, { status: 400 });
+    return Response.json({ error: "Query required" }, { status: 400 });
   }
 }
 
-// TODO: avoid duplicate unique key
 export async function PUT(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = Number(searchParams.get("id"));
@@ -54,10 +66,32 @@ export async function PUT(request: Request) {
   const token = searchParams.get("token");
 
   if (id != 0 && name != null && instance != null && token != null) {
-    await update(id, { name: name, instance: instance, token: token });
-    return Response.json({ result: "Bot updated" });
+    try {
+      await BotRepository.update(id, {
+        name: name,
+        instance: instance,
+        token: token,
+      });
+      return Response.json({ result: "Bot updated" });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        return Response.json(
+          { error: "Duplicate of name & instance" },
+          { status: 400 }
+        );
+      } else {
+        console.log(error);
+        return Response.json(
+          { error: "Internal Server Error" },
+          { status: 500 }
+        );
+      }
+    }
   } else {
-    return Response.json({ message: "Query required" }, { status: 400 });
+    return Response.json({ error: "Query required" }, { status: 400 });
   }
 }
 
@@ -66,9 +100,27 @@ export async function DELETE(request: Request) {
   const id = Number(searchParams.get("id"));
 
   if (id != 0) {
-    await deleteById(id);
-    return Response.json({ result: "Bot deleted" });
+    try {
+      await BotRepository.deleteById(id);
+      return Response.json({ result: "Bot deleted" });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        return Response.json(
+          { error: "Not found record with the specified ID" },
+          { status: 400 }
+        );
+      } else {
+        console.log(error);
+        return Response.json(
+          { error: "Internal Server Error" },
+          { status: 500 }
+        );
+      }
+    }
   } else {
-    return Response.json({ message: "id required" }, { status: 400 });
+    return Response.json({ error: "id required" }, { status: 400 });
   }
 }
