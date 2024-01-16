@@ -10,8 +10,8 @@ export async function findOneById(id: number) {
   return await prisma.rss.findUnique({ where: { id: id } });
 }
 
-export async function findAllByRssUrl(rssUrl: string) {
-  return await prisma.rss.findMany({ where: { rssUrl: rssUrl } });
+export async function findOneByRssUrl(rssUrl: string) {
+  return await prisma.rss.findUnique({ where: { rssUrl: rssUrl } });
 }
 
 export async function insert(rssUrl: string, rss: Prisma.RssCreateInput) {
