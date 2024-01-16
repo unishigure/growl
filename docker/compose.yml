@@ -6,8 +6,6 @@ services:
     build:
       context: ..
       dockerfile: docker/dockerfile
-    ports:
-      - "3001:3000"
     environment:
       DATABASE_URL: "postgresql://${DB_USER}:${DB_PASS}@database:5432/growl?schema=public"
     restart: always
