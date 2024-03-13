@@ -29,4 +29,4 @@ Run DB migration.
 docker exec api pnpm prisma migrate deploy
 ```
 
-Deploy success if you can connect to <http://localhost:88>
+Deploy success if you can connect to <http://localhost:80>
