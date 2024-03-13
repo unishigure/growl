@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
 import * as BotRepository from "./repository";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
