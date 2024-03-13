@@ -10,7 +10,6 @@ WORKDIR /home/growl
 COPY --chown=growl:growl . ./
 
 RUN pnpm i
-RUN pnpm build
 RUN pnpm tsc src/cron.ts --outDir ./dist
 
-CMD ["./src/startup.sh"]
+CMD ["pm2-runtime", "ecosystem.config.js"]
