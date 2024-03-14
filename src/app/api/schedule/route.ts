@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     // TODO: validation
 
-    if (schedule != null && noteTemplate != null && noteVisible != null && botId != null) {
+    if (schedule != null && noteTemplate != null && noteVisible != null && botId != 0) {
         try {
             const bot = await ScheduledNoteRepository.insert({
                 schedule: schedule,
@@ -58,13 +58,7 @@ export async function PUT(request: Request) {
 
     // TODO: validation
 
-    if (
-        id != 0 &&
-        schedule != null &&
-        noteTemplate != null &&
-        noteVisible != null &&
-        botId != null
-    ) {
+    if (id != 0 && schedule != null && noteTemplate != null && noteVisible != null && botId != 0) {
         try {
             const bot = await ScheduledNoteRepository.update(id, {
                 schedule: schedule,
@@ -75,10 +69,7 @@ export async function PUT(request: Request) {
             return Response.json({ result: "Bot updated", data: bot });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (
-                    error instanceof Prisma.PrismaClientKnownRequestError &&
-                    error.code === "P2003"
-                ) {
+                if (error.code === "P2003") {
                     return Response.json({ error: "Not found specified bot" }, { status: 400 });
                 } else if (error.code === "P2025") {
                     return Response.json(

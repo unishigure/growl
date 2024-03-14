@@ -18,22 +18,21 @@ export async function findAllByBotId(botId: number) {
     return await prisma.notificationNote.findMany({ where: { botId: botId } });
 }
 
-export async function insert(notificationNote: Prisma.NotificationNoteCreateInput, botId: number) {
+export async function insert(notificationNote: Prisma.NotificationNoteUncheckedCreateInput) {
     return await prisma.notificationNote.create({
         data: {
             rssUrl: notificationNote.rssUrl,
             schedule: notificationNote.schedule,
             noteTemplate: notificationNote.noteTemplate,
             noteVisible: notificationNote.noteVisible,
-            botId: botId,
+            botId: notificationNote.botId,
         },
     });
 }
 
 export async function update(
     id: number,
-    notificationNote: Prisma.NotificationNoteUpdateInput,
-    botId: number,
+    notificationNote: Prisma.NotificationNoteUncheckedUpdateInput,
 ) {
     return await prisma.notificationNote.update({
         data: {
@@ -41,7 +40,7 @@ export async function update(
             schedule: notificationNote.schedule,
             noteTemplate: notificationNote.noteTemplate,
             noteVisible: notificationNote.noteVisible,
-            botId: botId,
+            botId: notificationNote.botId,
         },
         where: { id: id },
     });
