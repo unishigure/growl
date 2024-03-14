@@ -1,4 +1,5 @@
 import * as BotRepository from "./repository";
+import { Bot } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
     const name = searchParams.get("name");
     const instance = searchParams.get("instance");
 
-    let bots;
+    let bots: Bot | Bot[] | null;
     if (id != 0) {
         bots = await BotRepository.findOneById(id);
     } else if (name != null && instance != null) {
@@ -27,6 +28,8 @@ export async function POST(request: Request) {
     const name = searchParams.get("name");
     const instance = searchParams.get("instance");
     const token = searchParams.get("token");
+
+    // TODO: validation
 
     if (name != null && instance != null && token != null) {
         try {
@@ -54,6 +57,8 @@ export async function PUT(request: Request) {
     const name = searchParams.get("name");
     const instance = searchParams.get("instance");
     const token = searchParams.get("token");
+
+    // TODO: validation
 
     if (id != 0 && name != null && instance != null && token != null) {
         try {
