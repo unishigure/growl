@@ -48,13 +48,12 @@ export async function POST(request: Request) {
             });
             return Response.json({ result: "NotificationNote created", data: bot });
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-                return Response.json({ error: "Duplicate of rssUrl" }, { status: 400 });
-            } else if (
-                error instanceof Prisma.PrismaClientKnownRequestError &&
-                error.code === "P2003"
-            ) {
-                return Response.json({ error: "Not found specified bot" }, { status: 400 });
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === "P2002") {
+                    return Response.json({ error: "Duplicate of rssUrl" }, { status: 400 });
+                } else if (error.code === "P2003") {
+                    return Response.json({ error: "Not found specified bot" }, { status: 400 });
+                }
             }
             console.error(error);
             return Response.json({ error: "Internal Server Error" }, { status: 500 });
@@ -91,7 +90,7 @@ export async function PUT(request: Request) {
                 noteVisible: noteVisible,
                 botId: botId,
             });
-            return Response.json({ result: "NotificationNote created", data: bot });
+            return Response.json({ result: "NotificationNote updated", data: bot });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === "P2002") {

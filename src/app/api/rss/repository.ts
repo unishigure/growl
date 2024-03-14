@@ -14,19 +14,19 @@ export async function findOneByRssUrl(rssUrl: string) {
     return await prisma.rss.findUnique({ where: { rssUrl: rssUrl } });
 }
 
-export async function insert(rssUrl: string, rss: Prisma.RssCreateInput) {
+export async function insert(rss: Prisma.RssUncheckedCreateInput) {
     return await prisma.rss.create({
         data: {
-            rssUrl: rssUrl,
+            rssUrl: rss.rssUrl,
             latestRss: rss.latestRss,
         },
     });
 }
 
-export async function update(id: number, rssUrl: string, rss: Prisma.RssUpdateInput) {
+export async function update(id: number, rss: Prisma.RssUncheckedUpdateInput) {
     return await prisma.rss.update({
         data: {
-            rssUrl: rssUrl,
+            rssUrl: rss.rssUrl,
             latestRss: rss.latestRss,
         },
         where: { id: id },

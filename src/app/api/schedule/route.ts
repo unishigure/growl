@@ -66,7 +66,7 @@ export async function PUT(request: Request) {
                 noteVisible: noteVisible,
                 botId: botId,
             });
-            return Response.json({ result: "Bot updated", data: bot });
+            return Response.json({ result: "ScheduledNote updated", data: bot });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === "P2003") {
