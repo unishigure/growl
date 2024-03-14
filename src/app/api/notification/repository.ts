@@ -26,6 +26,7 @@ export async function insert(notificationNote: Prisma.NotificationNoteUncheckedC
             noteTemplate: notificationNote.noteTemplate,
             noteVisible: notificationNote.noteVisible,
             botId: notificationNote.botId,
+            isActive: notificationNote.isActive,
         },
     });
 }
@@ -41,6 +42,7 @@ export async function update(
             noteTemplate: notificationNote.noteTemplate,
             noteVisible: notificationNote.noteVisible,
             botId: notificationNote.botId,
+            isActive: notificationNote.isActive,
         },
         where: { id: id },
     });

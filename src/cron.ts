@@ -15,7 +15,7 @@ async function callAPI(apiPath: string, method = "GET"): Promise<Response> {
                 return notes;
             });
         } catch (error) {
-            console.log(`${Date()}: Waiting for API server starting...`);
+            console.log(`${Date()}: Waiting for response from API server...`);
             await setTimeout(5000);
         }
     }
@@ -48,11 +48,13 @@ async function sendNote(text: string, visibility: string, instance: string, toke
     );
 }
 
+console.log(`${Date()}: Starting cron.ts`);
+
 getScheduleNote().then((list) => {
     if (list) {
         list.forEach((note) => {
-            getBot(note.botId)
-                .then((bot) => {
+            if (note.isActive) {
+                getBot(note.botId).then((bot) => {
                     CronJob.from({
                         cronTime: note.schedule,
                         onTick: () => {
@@ -69,6 +71,7 @@ getScheduleNote().then((list) => {
                     });
                     console.log(`${Date()}: ScheduledNote registered. id:${note.id}`);
                 });
+            }
         });
     }
 });

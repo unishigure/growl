@@ -17,6 +17,7 @@ CREATE TABLE "ScheduledNote" (
     "noteTemplate" TEXT NOT NULL,
     "noteVisible" TEXT NOT NULL,
     "botId" INTEGER NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -31,6 +32,7 @@ CREATE TABLE "NotificationNote" (
     "noteTemplate" TEXT NOT NULL,
     "noteVisible" TEXT NOT NULL,
     "botId" INTEGER NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

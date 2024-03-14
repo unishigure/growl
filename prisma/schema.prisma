@@ -26,6 +26,7 @@ model ScheduledNote {
   noteTemplate String
   noteVisible  String
   botId        Int
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   sender       Bot      @relation(fields: [botId], references: [id])
@@ -38,6 +39,7 @@ model NotificationNote {
   noteTemplate String
   noteVisible  String
   botId        Int
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   sender       Bot      @relation(fields: [botId], references: [id])

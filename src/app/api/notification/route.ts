@@ -29,6 +29,12 @@ export async function POST(request: Request) {
     const noteVisible = searchParams.get("noteVisible");
     const botId = Number(searchParams.get("botId"));
 
+    const isActiveParam = searchParams.get("isActive")?.toLowerCase();
+    let isActive = true;
+    if (isActiveParam == "false" || isActiveParam == "0") {
+        isActive = false;
+    }
+
     // TODO: validation
 
     if (
@@ -45,6 +51,7 @@ export async function POST(request: Request) {
                 noteTemplate: noteTemplate,
                 noteVisible: noteVisible,
                 botId: botId,
+                isActive: isActive,
             });
             return Response.json({ result: "NotificationNote created", data: bot });
         } catch (error) {
@@ -72,6 +79,12 @@ export async function PUT(request: Request) {
     const noteVisible = searchParams.get("noteVisible");
     const botId = Number(searchParams.get("botId"));
 
+    const isActiveParam = searchParams.get("isActive")?.toLowerCase();
+    let isActive = true;
+    if (isActiveParam == "false" || isActiveParam == "0") {
+        isActive = false;
+    }
+
     // TODO: validation
 
     if (
@@ -89,6 +102,7 @@ export async function PUT(request: Request) {
                 noteTemplate: noteTemplate,
                 noteVisible: noteVisible,
                 botId: botId,
+                isActive: isActive,
             });
             return Response.json({ result: "NotificationNote updated", data: bot });
         } catch (error) {
