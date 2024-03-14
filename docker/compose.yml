@@ -5,20 +5,9 @@ services:
     container_name: api
     build:
       context: ..
-      dockerfile: docker/api.dockerfile
+      dockerfile: docker/dockerfile
     environment:
       DATABASE_URL: "postgresql://${DB_USER}:${DB_PASS}@database:5432/growl?schema=public"
-    restart: always
-
-  cron:
-    container_name: cron
-    build:
-      context: ..
-      dockerfile: docker/cron.dockerfile
-    depends_on:
-      - api
-    environment:
-      IS_DOCKER: true
     restart: always
 
   database:
