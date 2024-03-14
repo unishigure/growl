@@ -4,18 +4,18 @@ import { setTimeout } from "timers/promises";
 
 const API_ROOT = "http://localhost:3000/api";
 
-async function callAPI(apiPath: string): Promise<Response> {
+async function callAPI(apiPath: string, method = "GET"): Promise<Response> {
     let isFetched = false;
     let response: any;
 
     while (!isFetched) {
         try {
-            response = await fetch(`${API_ROOT}/${apiPath}`).then((notes) => {
+            response = await fetch(`${API_ROOT}/${apiPath}`, { method: method }).then((notes) => {
                 isFetched = true;
                 return notes;
             });
         } catch (error) {
-            console.log("Waiting for API server starting...");
+            console.log(`${Date()}: Waiting for API server starting...`);
             await setTimeout(5000);
         }
     }
@@ -32,44 +32,52 @@ async function getNotificationNote(): Promise<NotificationNote[]> {
     return scheduledNote.json();
 }
 
-async function getBot(botId: string): Promise<Bot> {
+async function getBot(botId: number): Promise<Bot> {
     const bot = await callAPI(`bot?id=${botId}`);
     return bot.json();
 }
 
-const scheduledNoteList = getScheduleNote()
-    .then((notes) => notes)
-    .catch((error) => console.error(error));
+async function sendNote(text: string, visibility: string, instance: string, token: string) {
+    return await callAPI(
+        `note` +
+            `?text=${text}` +
+            `&visibility=${visibility}` +
+            `&instance=${instance}` +
+            `&token=${token}`,
+        "POST",
+    );
+}
 
-const notificationNoteList = getNotificationNote()
-    .then((notes) => notes)
-    .catch((error) => console.error(error));
-
-// TODO: Set crons
-scheduledNoteList.then((list) => {
+getScheduleNote().then((list) => {
     if (list) {
         list.forEach((note) => {
-            CronJob.from({
-                cronTime: note.schedule,
-                onTick: function () {
-                    console.log(`${Date()}: ScheduledNote, ${note.id}`);
-                },
-                start: true,
-            });
+            getBot(note.botId)
+                .then((bot) => {
+                    CronJob.from({
+                        cronTime: note.schedule,
+                        onTick: () => {
+                            sendNote(
+                                note.noteTemplate,
+                                note.noteVisible,
+                                bot.instance,
+                                bot.token,
+                            ).then(() =>
+                                console.log(`${Date()}: ScheduledNote sent. id:${note.id}`),
+                            );
+                        },
+                        start: true,
+                    });
+                    console.log(`${Date()}: ScheduledNote registered. id:${note.id}`);
+                });
         });
     }
 });
 
-notificationNoteList.then((list) => {
+// TODO: Set crons
+getNotificationNote().then((list) => {
     if (list) {
         list.forEach((note) => {
-            CronJob.from({
-                cronTime: note.schedule,
-                onTick: function () {
-                    console.log(`${Date()}: NotificationNote, ${note.id}`);
-                },
-                start: true,
-            });
+            console.log(`${Date()}: NotificationNote id:${note.id}`);
         });
     }
 });
