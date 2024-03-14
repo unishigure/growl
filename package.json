@@ -8,9 +8,9 @@
         "start": "next start",
         "lint": "next lint",
         "format": "prettier --write src/",
-        "migrate": "prisma migrate deploy",
-        "migrate-dev": "prisma migrate dev",
         "generate": "prisma generate",
+        "migrate-dev": "docker exec api pnpm prisma migrate dev",
+        "migrate": "docker exec api pnpm prisma migrate deploy",
         "restart": "docker compose -f \"docker/compose.yml\" down && docker compose -f \"docker/compose.yml\" up -d --build",
         "clean": "docker compose -f \"docker/compose.yml\" down --rmi all -v"
     },
