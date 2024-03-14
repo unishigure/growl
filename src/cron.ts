@@ -1,49 +1,48 @@
-import { Bot, ScheduledNote, NotificationNote, Rss } from "@prisma/client";
+import { Bot, ScheduledNote, NotificationNote } from "@prisma/client";
 import { CronJob } from "cron";
+import { setTimeout } from "timers/promises";
 
-const API_ROOT = `http://${process.env.IS_DOCKER ? "api" : "localhost"}:3000/api`;
+const API_ROOT = "http://localhost:3000/api";
 
-// TODO: below is cronjob example
-const job = CronJob.from({
-    cronTime: "* * * * * *",
-    onTick: function () {
-        console.log(`Hello, world. ${Date()}`);
-    },
-    start: true,
-    timeZone: "America/Los_Angeles",
-});
+async function callAPI(apiPath: string): Promise<Response> {
+    let isFetched = false;
+    let response: any;
+
+    while (!isFetched) {
+        try {
+            response = await fetch(`${API_ROOT}/${apiPath}`).then((notes) => {
+                isFetched = true;
+                return notes;
+            });
+        } catch (error) {
+            console.log("Waiting for API server starting...");
+            await setTimeout(5000);
+        }
+    }
+    return response;
+}
 
 async function getScheduleNote(): Promise<ScheduledNote[]> {
-    const scheduledNote = await fetch(`${API_ROOT}/schedule`);
+    let scheduledNote = await callAPI("schedule");
     return scheduledNote.json();
 }
 
 async function getNotificationNote(): Promise<NotificationNote[]> {
-    const scheduledNote = await fetch(`${API_ROOT}/notification`);
+    const scheduledNote = await callAPI("notification");
     return scheduledNote.json();
 }
 
 async function getBot(botId: string): Promise<Bot> {
-    const bot = await fetch(`${API_ROOT}/bot?id=${botId}`);
+    const bot = await callAPI(`bot?id=${botId}`);
     return bot.json();
 }
 
-// TODO: Get ScheduledNote
 const scheduledNoteList = getScheduleNote()
-    // .then((notes) => notes)
-    .then((notes) => {
-        console.log(notes);
-        return notes;
-    })
+    .then((notes) => notes)
     .catch((error) => console.error(error));
 
-// TODO: Get NotificationNote
 const notificationNoteList = getNotificationNote()
-    // .then((notes) => notes)
-    .then((notes) => {
-        console.log(notes);
-        return notes;
-    })
+    .then((notes) => notes)
     .catch((error) => console.error(error));
 
 // TODO: Set crons
@@ -53,7 +52,21 @@ scheduledNoteList.then((list) => {
             CronJob.from({
                 cronTime: note.schedule,
                 onTick: function () {
-                    console.log(`Hello, world. ${Date()}`);
+                    console.log(`${Date()}: ScheduledNote, ${note.id}`);
+                },
+                start: true,
+            });
+        });
+    }
+});
+
+notificationNoteList.then((list) => {
+    if (list) {
+        list.forEach((note) => {
+            CronJob.from({
+                cronTime: note.schedule,
+                onTick: function () {
+                    console.log(`${Date()}: NotificationNote, ${note.id}`);
                 },
                 start: true,
             });
