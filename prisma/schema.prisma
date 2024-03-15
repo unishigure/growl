@@ -29,7 +29,7 @@ model ScheduledNote {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  sender       Bot      @relation(fields: [botId], references: [id])
+  sender       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
 }
 
 model NotificationNote {
@@ -42,7 +42,7 @@ model NotificationNote {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  sender       Bot      @relation(fields: [botId], references: [id])
+  sender       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
   Rss          Rss?
 }
 
@@ -52,5 +52,5 @@ model Rss {
   latestRss String
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
-  target    NotificationNote @relation(fields: [rssUrl], references: [rssUrl])
+  target    NotificationNote @relation(fields: [rssUrl], references: [rssUrl], onDelete: Cascade)
 }

@@ -60,10 +60,10 @@ CREATE UNIQUE INDEX "NotificationNote_rssUrl_key" ON "NotificationNote"("rssUrl"
 CREATE UNIQUE INDEX "Rss_rssUrl_key" ON "Rss"("rssUrl");
 
 -- AddForeignKey
-ALTER TABLE "ScheduledNote" ADD CONSTRAINT "ScheduledNote_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ScheduledNote" ADD CONSTRAINT "ScheduledNote_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "NotificationNote" ADD CONSTRAINT "NotificationNote_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NotificationNote" ADD CONSTRAINT "NotificationNote_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Rss" ADD CONSTRAINT "Rss_rssUrl_fkey" FOREIGN KEY ("rssUrl") REFERENCES "NotificationNote"("rssUrl") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Rss" ADD CONSTRAINT "Rss_rssUrl_fkey" FOREIGN KEY ("rssUrl") REFERENCES "NotificationNote"("rssUrl") ON DELETE CASCADE ON UPDATE CASCADE;
